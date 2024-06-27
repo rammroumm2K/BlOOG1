@@ -14,7 +14,7 @@
         <?php
         require 'menu.tag.view.php';
 
-        if (is_null($selectAllTag)) :void
+        if (is_null($selectAllTag)) :
         ?>
             <h3>Pas encore de tag !</h3>
             <?php

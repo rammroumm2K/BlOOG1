@@ -58,11 +58,32 @@ class TagManager implements InterfaceManager{
         $sql = "SELECT t.*,
         
          FROM `tag` t
-        -- LEFT JOIN ``
-        -- LEFT JOIN 
-         ORDER BY t.`tag_id` DESC";
+        LEFT JOIN `article_article_id `  ON .`tag_tag_id ` = t.`tag_tag_iD`
+        LEFT JOIN 
+        ORDER BY t.`tag_tag_id ` DESC";
 
-         return [];
+        $prepare = $this->connect->prepare($sql);
+        try{
+            $prepare->bindValue(1,$id, OurPDO::PARAM_INT);
+            $prepare->execute();
+
+            // pas de résultat = null
+            if($prepare->rowCount()===0) return null;
+
+            // récupération des valeurs en tableau associatif
+            $result = $prepare->fetch(OurPDO::FETCH_ASSOC);
+
+            // création de l'instance TagMapping
+            $result = new TagMapping($result);
+
+            $prepare->closeCursor();
+            
+            return $result;
+
+
+        }catch(Exception $e){
+            return $e->getMessage();
+        }
 
     }
 
@@ -109,7 +130,7 @@ class TagManager implements InterfaceManager{
 
         try{
          $prepare->bindValue(1,$mapping->getTagSlug());
-           // $prepare->bindValue(2,1, OurPDO::PARAM_INT);
+            //$prepare->bindValue(2,1, OurPDO::PARAM_INT);
             //$prepare->bindValue(3,1, OurPDO::PARAM_INT);
 
             $prepare->execute();

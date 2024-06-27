@@ -21,6 +21,10 @@ class TagMapping extends AbstractMapping
     {
         return $this->articles;
     }
+
+    public function setArticles(): ?array   {
+        return $this->articles;
+    }
     
 
     use TraitSlugify;
