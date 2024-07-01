@@ -4,6 +4,7 @@ namespace model\Manager ;
 
 use Exception;
 use model\Interface\InterfaceManager;
+use model\Mapping\ArticlesMapping;
 use model\Mapping\TagMapping;
 use model\Abstract\AbstractMapping;
 use model\OurPDO;
@@ -52,15 +53,16 @@ class TagManager implements InterfaceManager{
         return $arrayTag;
     }
 
-    public function selectOneByIdWithArticles(int $id): ?array
+    public function selectOneByIdWithArticles(int $id)
     {
         // requête SQL
         $sql = "SELECT t.*,
-        
+                    GROUP_CONCAT(a.`article_id`) as article_id , GROUP_CONCAT(a.`article_title` SEPARATOR '|||') as article_title
          FROM `tag` t
-        LEFT JOIN `article_article_id `  ON .`tag_tag_id ` = t.`tag_tag_iD`
-        LEFT JOIN 
-        ORDER BY t.`tag_tag_id ` DESC";
+            LEFT JOIN `tag_has_article` h  ON h.`tag_tag_id` = t.`tag_id`
+            LEFT JOIN `article` a ON a.`article_id` = h.`article_article_id`
+        WHERE t.`tag_id` = ?
+        GROUP BY t.`tag_id`";
 
         $prepare = $this->connect->prepare($sql);
         try{
@@ -73,12 +75,30 @@ class TagManager implements InterfaceManager{
             // récupération des valeurs en tableau associatif
             $result = $prepare->fetch(OurPDO::FETCH_ASSOC);
 
+            if(!is_null($result['article_id'])){
+                $array_id = explode (',',$result['article_id']);
+                $array_title = explode ('|||',$result['article_title']);
+                for($i=0;$i<count($array_id);$i++){
+                    $array[] = new ArticlesMapping([
+                        'article_id'=>$array_id[$i],
+                        'article_title'=>$array_title[$i]
+                    ]);
+                }
+
+            }else{
+                $array = null;
+            }
+
+
             // création de l'instance TagMapping
             $result = new TagMapping($result);
+
+            $result->setArticles($array);
 
             $prepare->closeCursor();
             
             return $result;
+
 
 
         }catch(Exception $e){

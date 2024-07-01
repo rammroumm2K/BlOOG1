@@ -34,7 +34,7 @@ $TagManager = new TagManager($dbConnect);
 if(isset($_GET['view'])&&ctype_digit($_GET['view'])){
     $idTag = (int) $_GET['view'];
     // select one tag
-    $selectOneTag = $TagManager->selectOneById($idTag);
+    $selectOneTag = $TagManager->selectOneByIdWithArticles($idTag);
     // view
     require "../view/tag/selectOneTag.view.php";
 

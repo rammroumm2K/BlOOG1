@@ -22,8 +22,9 @@ class TagMapping extends AbstractMapping
         return $this->articles;
     }
 
-    public function setArticles(): ?array   {
-        return $this->articles;
+    public function setArticles(?array $tab)
+    {
+        $this->articles = $tab;
     }
     
 
