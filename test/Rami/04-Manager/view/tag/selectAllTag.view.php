@@ -22,7 +22,7 @@
             foreach ($selectAllTag as $item) :
             ?>
                 <h4>ID : <?= $item->getTagId() ?> <a href="?view=<?= $item->getTagId() ?>">Voir ce commentaire via son id</a> | <a href="?update=<?= $item->getTagId() ?>">Mettre à jour</a> | <a href="?delete=<?= $item->getTagId() ?>" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');">Supprimer</a>
-                <a href="?selectOneByIdWithArticles=<? $item->getArticle()?>">  | voir les articles utilisant cet tag </a></h4>
+                <a href="?view=<?= $item->getTagId() ?>">  | voir les articles utilisant cet tag </a></h4>
                 <p><?= $item->getTagSlug() ?></p>
                 
                 <hr>

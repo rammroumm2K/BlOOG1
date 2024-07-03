@@ -98,6 +98,12 @@ if(isset($_GET['view'])&&ctype_digit($_GET['view'])){
     // view
     require "../view/tag/updateTag.view.php";
 
+
+    // select same tag
+    $selectOneByIdWithArticles = $TagManager->selectOneByIdWithArticles($idTag);
+    //view
+    require "../view/tag/showAllSameTag.php";
+
 // delete TAG
 }elseif(isset($_GET['delete'])&&ctype_digit($_GET['delete'])){
     $idTag = (int) $_GET['delete'];
@@ -118,5 +124,7 @@ if(isset($_GET['view'])&&ctype_digit($_GET['view'])){
     // view
     require "../view/tag/selectAllTag.view.php";
 }
+
+
 
 $dbConnect = null;
